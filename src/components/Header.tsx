@@ -17,23 +17,14 @@ interface IHeaderProps {
 const Header: React.FC<IHeaderProps> = ({ title, isDarkMode }) => {
   const [darkMode, setDarkMode] = useLocalStorage("darkMode", isDarkMode);
 
-  console.log(darkMode);
-
   const handleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
   return (
-    <header className="bg-gray-800 w-full">
+    <header className="bg-[#0C0C0C] w-full">
       <div className="flex justify-between items-center py-4 px-8 text-white">
         <h1 className="text-2xl font-semibold">{title}</h1>
-
-        {/* <span
-          className="border-2  p-2 rounded-full cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out hover:bg-gray-700 select-none"
-          onClick={handleDarkMode}
-        >
-          {darkMode === true ? "🌞" : "🌜"}
-        </span> */}
 
         <div className="flex space-x-4">
           <Toggle darkMode={darkMode ?? true} onDarkMode={handleDarkMode} />
