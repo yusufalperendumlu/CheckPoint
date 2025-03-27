@@ -12,7 +12,7 @@ const LoginPage = () => {
           alt="Hello"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-60"></div>
+        <div className="absolute inset-0 "></div>
       </div>
 
       <div className="flex items-center justify-center">
