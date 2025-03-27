@@ -1,18 +1,18 @@
-import ReceptionPage from "@/views/reception/ReceptionPage";
-import useTheme from "@/hooks/useTheme";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "@/routes/__root";
 
-import Layout from "@/components/Layout";
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface RegisterRouter {
+    router: typeof router;
+  }
+}
 
 function App() {
-  const theme = useTheme();
-
-  console.log(theme);
-
   return (
     <>
-      <Layout isDarkMode={theme === "dark"}>
-        <ReceptionPage />
-      </Layout>
+      <RouterProvider router={router} />
     </>
   );
 }
