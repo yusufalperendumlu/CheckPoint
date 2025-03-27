@@ -1,3 +1,5 @@
+import { Route } from "@tanstack/react-router";
+
 const ReceptionPage = () => {
   return (
     <>

@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
 
 import { FaUserAlt } from "react-icons/fa";
 
 import useLocalStorage from "@/hooks/useLocalStorage";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Toggle from "@/components/toggle/Toggle";
 
 interface IHeaderProps {
@@ -36,16 +37,28 @@ const Header: React.FC<IHeaderProps> = ({ title, isDarkMode }) => {
 
         <div className="flex space-x-4">
           <Toggle darkMode={darkMode ?? true} onDarkMode={handleDarkMode} />
-          <Button
-            variant={!darkMode ? "secondary" : "default"}
-            title="Sign in"
-            className="cursor-pointer"
-          />
-          <Button
-            variant={darkMode ? "secondary" : "default"}
-            title="Sign up"
-            className="cursor-pointer"
-          />
+          <Link
+            to="/login"
+            className={clsx(
+              buttonVariants({
+                variant: `${darkMode ? "secondary" : "default"}`,
+              }),
+              "cursor-pointer"
+            )}
+          >
+            Sign in
+          </Link>
+          <Link
+            to="/register"
+            className={clsx(
+              buttonVariants({
+                variant: `${!darkMode ? "secondary" : "default"}`,
+              }),
+              "cursor-pointer"
+            )}
+          >
+            Sign up
+          </Link>
         </div>
         {/* <span className="border-2 border-gray-300 p-2 rounded-full cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out hover:bg-gray-700">
           <FaUserAlt className="h-6 w-6" />
