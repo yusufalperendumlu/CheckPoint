@@ -22,38 +22,53 @@ const Header: React.FC<IHeaderProps> = ({ title, isDarkMode }) => {
   };
 
   return (
-    <header className="bg-[#0C0C0C] w-full">
-      <div className="flex justify-between items-center py-4 px-8 text-white">
+    <header
+      className={clsx(
+        "sticky top-0 w-full",
+        darkMode ? "bg-[#171010]" : "bg-[#F5F5F5]"
+      )}
+    >
+      <div
+        className={clsx(
+          "flex justify-between items-center py-4 px-8",
+          darkMode ? "text-white" : "text-black"
+        )}
+      >
         <h1 className="text-2xl font-semibold">{title}</h1>
 
         <div className="flex space-x-4">
           <Toggle darkMode={darkMode ?? true} onDarkMode={handleDarkMode} />
-          <Link
-            to="/login"
-            className={clsx(
-              buttonVariants({
-                variant: `${darkMode ? "secondary" : "default"}`,
-              }),
-              "cursor-pointer"
-            )}
-          >
-            Sign in
-          </Link>
-          <Link
-            to="/register"
-            className={clsx(
-              buttonVariants({
-                variant: `${!darkMode ? "secondary" : "default"}`,
-              }),
-              "cursor-pointer"
-            )}
-          >
-            Sign up
-          </Link>
+          {localStorage.getItem("isLoggedIn") === "true" ? (
+            <>
+              <Link
+                to="/login"
+                className={clsx(
+                  buttonVariants({
+                    variant: `${darkMode ? "secondary" : "default"}`,
+                  }),
+                  "cursor-pointer"
+                )}
+              >
+                Sign in
+              </Link>
+              <Link
+                to="/register"
+                className={clsx(
+                  buttonVariants({
+                    variant: `${!darkMode ? "secondary" : "default"}`,
+                  }),
+                  "cursor-pointer"
+                )}
+              >
+                Sign up
+              </Link>
+            </>
+          ) : (
+            <span className=" p-2 rounded-full cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out hover:bg-gray-700">
+              <FaUserAlt className="h-6 w-6" />
+            </span>
+          )}
         </div>
-        {/* <span className="border-2 border-gray-300 p-2 rounded-full cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out hover:bg-gray-700">
-          <FaUserAlt className="h-6 w-6" />
-        </span> */}
       </div>
     </header>
   );

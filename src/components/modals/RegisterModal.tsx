@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 
-import { FaGoogle, FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -93,7 +93,7 @@ const RegisterModal = () => {
           />
 
           <Button
-            title={<FaFacebookF />}
+            title={<FaGithub />}
             variant="outline"
             className="bg-white text-black cursor-pointer hover:bg-gray-200"
           />

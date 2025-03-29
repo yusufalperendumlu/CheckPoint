@@ -2,16 +2,24 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
 
-import { FaGoogle, FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
+
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const LoginModal = () => {
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", false);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSignIn = () => {
+    setIsLoggedIn(true);
   };
 
   return (
@@ -45,6 +53,7 @@ const LoginModal = () => {
       </p>
       <Link
         to="/home"
+        onClick={handleSignIn}
         className={clsx(
           buttonVariants({ variant: "outline" }),
           "bg-white text-black cursor-pointer hover:bg-gray-200"
@@ -77,7 +86,7 @@ const LoginModal = () => {
           />
 
           <Button
-            title={<FaFacebookF />}
+            title={<FaGithub />}
             variant="outline"
             className="bg-white text-black cursor-pointer hover:bg-gray-200"
           />
