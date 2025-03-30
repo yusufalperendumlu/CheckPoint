@@ -1,6 +1,6 @@
 import MainLayout from "@/components/MainLayout";
 import UrlBar from "@/components/home/UrlBar";
-import ControllerList from "@/components/home/ControllerList";
+import SystemStatus from "@/components/home/SystemStatus";
 
 const HomePage = () => {
   return (
@@ -11,7 +11,7 @@ const HomePage = () => {
             <UrlBar />
           </div>
           <div className="w-full flex items-center justify-center mt-20">
-            <ControllerList />
+            <SystemStatus />
           </div>
         </div>
       </MainLayout>

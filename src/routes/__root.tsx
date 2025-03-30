@@ -4,6 +4,7 @@ import ReceptionPage from "@/views/reception/ReceptionPage";
 import LoginPage from "@/views/login/LoginPage";
 import RegisterPage from "@/views/register/RegisterPage";
 import HomePage from "@/views/home/HomePage";
+import AddEndpointPage from "@/views/addEndpoint/AddEndpointPage";
 
 import Layout from "@/components/Layout";
 
@@ -49,9 +50,22 @@ const homeRoute = createRoute({
   },
 });
 
+const addEndpointRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/add-endpoint",
+  component: () => {
+    return (
+      <Layout>
+        <AddEndpointPage />
+      </Layout>
+    );
+  },
+});
+
 export const routeTree = rootRoute.addChildren([
   receptionRoute,
   loginRoute,
   registerRoute,
   homeRoute,
+  addEndpointRoute,
 ]);
