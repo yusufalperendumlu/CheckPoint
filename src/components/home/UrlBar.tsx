@@ -96,7 +96,7 @@ const UrlBar = () => {
       </Form>
 
       {isDropdownOpen && (
-        <div className="absolute top-full -ml-21 mt-1 w-[50vw] bg-neutral-900 text-white rounded-sm">
+        <div className="absolute top-full -ml-21 mt-1 w-[50vw] bg-neutral-900 text-white rounded-sm z-10">
           {apiEndpoints.map((suggestion, index) => (
             <div
               key={index}

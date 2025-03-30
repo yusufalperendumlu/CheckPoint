@@ -2,8 +2,13 @@ import { ISidebarType } from "@/types/sidebar.type";
 
 const SidebarItems: ISidebarType[] = [
     {
+        label: "Home",
+        href: "/home",
+        active: true
+    },
+    {
         label: "Add endpoint",
-        href: "/addEndpoint",
+        href: "/add-endpoint",
         active: true
     }, 
     {

@@ -8,8 +8,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="flex w-full items-baseline justify-center overflow-x-hidden">
         <SidebarTrigger className="absolute top-4 left-4 z-50" />
         {children}
-      </main>
-      ,{" "}
+      </main>{" "}
     </SidebarProvider>
   );
 };
