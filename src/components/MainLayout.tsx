@@ -3,13 +3,17 @@ import { AppSidebar } from "@/components/sidebar/AppSidebar";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="flex w-full items-baseline justify-center overflow-x-hidden">
-        <SidebarTrigger className="absolute top-4 left-4 z-50" />
-        {children}
-      </main>{" "}
-    </SidebarProvider>
+    <main className="relative h-screen overflow-x-hidden select-none bg-[var(--color-background)]">
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarTrigger />
+        <div className="absolute left-64 z-10 right-0 top-0 bottom-0 flex my-2 mr-2">
+          <div className="w-full h-full overflow-auto bg-[var(--color-page)] rounded-2xl">
+            {children}
+          </div>
+        </div>
+      </SidebarProvider>
+    </main>
   );
 };
 

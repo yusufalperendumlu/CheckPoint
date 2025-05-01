@@ -5,7 +5,7 @@ const controllers = [
 ];
 
 const ControllersList = () => (
-  <div className="border-2 rounded-lg p-4 w-[40rem] ">
+  <div className="border-2 rounded-lg p-4 border-white text-gray-400">
     <h3 className="text-center font-semibold">
       Şuanda sistemde çalışan controller
     </h3>

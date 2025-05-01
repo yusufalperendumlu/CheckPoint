@@ -25,6 +25,10 @@ const RegisterModal = () => {
         <p className="text-sm text-gray-500">
           Create an account to get started.
         </p>
+        <p className="text-sm text-gray-500">
+          If you are going to sign in with your corporate email, go directly to
+          the sign in page.
+        </p>
       </div>
 
       <Input type="text" placeholder="Username" />
@@ -85,18 +89,14 @@ const RegisterModal = () => {
           <span className="px-4">Or sign up with</span>
           <span className="flex-1 h-px bg-gray-300"></span>
         </p>
-        <div className="flex items-center space-x-4">
-          <Button
-            title={<FaGoogle />}
-            variant="outline"
-            className="bg-white text-black cursor-pointer hover:bg-gray-200"
-          />
-
-          <Button
-            title={<FaGithub />}
-            variant="outline"
-            className="bg-white text-black cursor-pointer hover:bg-gray-200"
-          />
+        <div className="flex items-center space-x-4 z-30">
+          <button className="flex items-center justify-center p-2 rounded-full bg-white text-black cursor-pointer hover:bg-gray-200">
+            <FaGoogle />
+          </button>
+          <button className="flex items-center justify-center p-2 rounded-full bg-white text-black cursor-pointer hover:bg-gray-200">
+            {" "}
+            <FaGithub />
+          </button>
         </div>
       </div>
     </div>

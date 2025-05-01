@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
 
@@ -21,17 +21,24 @@ const Header: React.FC<IHeaderProps> = ({ title, isDarkMode }) => {
     setDarkMode(!darkMode);
   };
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    }
+    if (!darkMode) {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
   return (
     <header
       className={clsx(
-        "sticky top-0 w-full",
-        darkMode ? "bg-[#171010]" : "bg-[#F5F5F5]"
+        "sticky top-0 h-[4.5rem] w-full bg-[var(--color-card)] transition-all duration-200 z-20 "
       )}
     >
       <div
         className={clsx(
-          "flex justify-between items-center py-4 px-8",
-          darkMode ? "text-white" : "text-black"
+          "flex justify-between items-center py-4 px-8 text-[var(--color-text)]"
         )}
       >
         <h1 className="text-2xl font-semibold">{title}</h1>

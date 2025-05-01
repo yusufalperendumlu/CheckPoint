@@ -80,7 +80,7 @@ const UrlBar = () => {
               <FormItem className="relative w-full">
                 <FormControl>
                   <Input
-                    className="w-[50vw] text-black"
+                    className="w-[50vw] text-white"
                     placeholder="Enter URL or paste text"
                     onFocus={handleFocus}
                     autoComplete="off"
@@ -91,7 +91,11 @@ const UrlBar = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" title="Submit" />
+          <Button
+            type="submit"
+            title="Submit"
+            className="bg-indigo-500 text-white"
+          />
         </form>
       </Form>
 

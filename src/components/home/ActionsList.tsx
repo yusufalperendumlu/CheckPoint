@@ -14,7 +14,7 @@ const StatusIndicator = ({ status }: { status: string }) => (
 );
 
 const ActionsList = () => (
-  <div className="relative h-[20rem] border-2 rounded-lg p-4 w-[40rem] ">
+  <div className="relative border-2 rounded-lg p-4 w-[40rem] border-white text-gray-400">
     <h2 className="text-center font-semibold">
       Şuanda sistemde çalışan actionlar
     </h2>

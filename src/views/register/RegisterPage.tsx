@@ -19,7 +19,7 @@ const RegisterPage = () => {
         <RegisterModal />
       </div>
 
-      <div className="fixed top-8 left-1/2 ml-8">
+      <div className="fixed top-8 left-1/2 ml-8 text-gray-200 hover:text-white">
         <BreadcrumbCustom url="/register" name="Sign up" />
       </div>
     </div>

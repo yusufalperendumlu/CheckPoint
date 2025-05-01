@@ -1,23 +1,26 @@
 import { createRoute, createRootRoute } from "@tanstack/react-router";
-import ReceptionPage from "@/views/reception/ReceptionPage";
+import LandingPage from "@/views/landing/LandingPage";
 
 import LoginPage from "@/views/login/LoginPage";
 import RegisterPage from "@/views/register/RegisterPage";
 import HomePage from "@/views/home/HomePage";
 import AddEndpointPage from "@/views/addEndpoint/AddEndpointPage";
-
-import Layout from "@/components/Layout";
+import ListEndpointPage from "@/views/listEndpoint/ListEndpointPage";
+import DetailEndpointPage from "@/views/listEndpoint/detailEnpoint/DetailEndpointPage";
+import AnalysisPage from "@/views/analysis/AnalysisPage";
+import PasswordResetPage from "@/views/resetPassword/ResetPasswordPage";
 
 const rootRoute = createRootRoute({});
 
-const receptionRoute = createRoute({
+const landingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: () => {
     return (
-      <Layout>
-        <ReceptionPage />
-      </Layout>
+      // <Layout>
+      //   <LandingPage />
+      // </Layout>
+      <LandingPage />
     );
   },
 });
@@ -42,11 +45,7 @@ const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/home",
   component: () => {
-    return (
-      <Layout>
-        <HomePage />
-      </Layout>
-    );
+    return <HomePage />;
   },
 });
 
@@ -54,18 +53,47 @@ const addEndpointRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/add-endpoint",
   component: () => {
-    return (
-      <Layout>
-        <AddEndpointPage />
-      </Layout>
-    );
+    return <AddEndpointPage />;
   },
 });
 
+const listEndpointRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/list-endpoint",
+  component: () => <ListEndpointPage />,
+});
+
+const detailEndpointRoute = createRoute({
+  getParentRoute: () => listEndpointRoute,
+  path: "detail-endpoint/$team",
+  component: () => <DetailEndpointPage />,
+});
+
+const analysisEndpointRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/analysis",
+  component: () => <AnalysisPage />,
+});
+
+const passwordResetRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/password-reset",
+  component: () => <PasswordResetPage />,
+});
+
+const listEndpointRouteWithDetail = listEndpointRoute.addChildren([
+  detailEndpointRoute,
+]);
+
 export const routeTree = rootRoute.addChildren([
-  receptionRoute,
+  landingRoute,
   loginRoute,
   registerRoute,
   homeRoute,
   addEndpointRoute,
+  listEndpointRouteWithDetail,
+  analysisEndpointRoute,
+  passwordResetRoute,
 ]);
+
+export default routeTree;
