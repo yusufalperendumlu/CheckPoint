@@ -18,7 +18,6 @@ const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
   const [emailNotify, setEmailNotify] = useState(false);
   const [phoneNotify, setPhoneNotify] = useState(false);
   const [statusCode, setStatusCode] = useState("");
-  const [variableType, setVariableType] = useState("");
 
   const handleAddField = () =>
     setFields([...fields, { key: "", value: "", type: "" }]);
@@ -28,11 +27,32 @@ const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleChange = (index: number, type: "key" | "value", val: string) => {
+  const handleChange = (
+    index: number,
+    type: "key" | "value" | "type",
+    val: string | number | boolean
+  ) => {
     const updated = [...fields];
-    updated[index][type] = val;
+
+    if (type === "value") {
+      const currentType = updated[index].type;
+
+      if (currentType === "Integer") {
+        const parsedValue = parseInt(val as string, 10);
+        updated[index].value = isNaN(parsedValue)
+          ? parsedValue.toString()
+          : parsedValue;
+      } else {
+        updated[index].value = val;
+      }
+    } else {
+      updated[index][type] = String(val);
+    }
+
     setFields(updated);
   };
+
+  console.log(fields);
 
   return (
     <div className="relative p-6 bg-gray-100 rounded-xl text-black space-y-4">
@@ -45,11 +65,15 @@ const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
       <h3 className="text-xl font-semibold">Value of Body</h3>
       <KeyValueInput
         pairs={fields}
-        variableType={variableType}
-        setVariableType={setVariableType}
         onAdd={handleAddField}
         onRemove={handleRemoveField}
-        onChange={() => handleChange}
+        onChange={(
+          index: number,
+          key: string,
+          value: string | number | boolean
+        ) =>
+          handleChange(index, key as "key" | "value" | "type", value as string)
+        }
         className={clsx(
           fields.length > 1 ? "cursor-pointer" : "cursor-not-allowed opacity-50"
         )}
