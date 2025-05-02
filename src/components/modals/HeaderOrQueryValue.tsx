@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import KeyValueInput from "@/components/KeyValueInput";
+import clsx from "clsx";
 
 const HeaderOrQueryModal = ({
   onClose,
@@ -10,15 +11,37 @@ const HeaderOrQueryModal = ({
   onClose: () => void;
   type: "Query" | "Header";
 }) => {
-  const [fields, setFields] = useState([{ key: "", value: "" }]);
-  const [variableType, setVariableType] = useState("");
+  const [fields, setFields] = useState([{ key: "", value: "", type: "" }]);
 
-  const handleAdd = () => setFields([...fields, { key: "", value: "" }]);
-  const handleRemove = (index: number) =>
-    setFields(fields.filter((_, i) => i !== index));
-  const handleChange = (index: number, type: "key" | "value", val: string) => {
+  const handleAddField = () =>
+    setFields([...fields, { key: "", value: "", type: "" }]);
+  const handleRemoveField = (index: number) => {
+    if (fields.length > 1) {
+      setFields(fields.filter((_, i) => i !== index));
+    }
+  };
+  const handleChange = (
+    index: number,
+    type: "key" | "value" | "type",
+    val: string | number | boolean
+  ) => {
     const updated = [...fields];
-    updated[index][type] = val;
+
+    if (type === "value") {
+      const currentType = updated[index].type;
+
+      if (currentType === "Integer") {
+        const parsedValue = parseInt(val as string, 10);
+        updated[index].value = isNaN(parsedValue)
+          ? parsedValue.toString()
+          : parsedValue;
+      } else {
+        updated[index].value = val;
+      }
+    } else {
+      updated[index][type] = String(val);
+    }
+
     setFields(updated);
   };
 
@@ -33,11 +56,18 @@ const HeaderOrQueryModal = ({
       <h3 className="text-xl font-semibold">{type}’den Değer Yolla</h3>
       <KeyValueInput
         pairs={fields}
-        variableType={variableType}
-        setVariableType={setVariableType}
-        onAdd={handleAdd}
-        onRemove={handleRemove}
-        onChange={() => handleChange}
+        onAdd={handleAddField}
+        onRemove={handleRemoveField}
+        onChange={(
+          index: number,
+          key: string,
+          value: string | number | boolean
+        ) =>
+          handleChange(index, key as "key" | "value" | "type", value as string)
+        }
+        className={clsx(
+          fields.length > 1 ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+        )}
       />
       <div className="flex items-center justify-center w-[15rem] pl-8">
         <Button
