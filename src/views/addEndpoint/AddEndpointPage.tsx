@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useUrlHistory } from "@/hooks/useUrlHistory";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +19,9 @@ import HeaderOrQueryModal from "@/components/modals/HeaderOrQueryValue";
 
 const AddEndpointPage = () => {
   const [baseUrl, setBaseUrl] = useState("");
-  const [endpoint, setEndpoint] = useState("");
+  const { history, addUrl, isOpen, setIsOpen, dropdownRef } = useUrlHistory();
+  const [controller, setController] = useState("");
+  const [action, setAction] = useState("");
   const [method, setMethod] = useState("GET");
   const [params, setParams] = useState([""]);
   const [showBodyModal, setShowBodyModal] = useState(false);
@@ -47,9 +51,25 @@ const AddEndpointPage = () => {
     if (showHeaderOrQueryModal) setShowHeaderOrQueryModal(false);
   };
 
+  const handleSelect = (url: string) => {
+    setBaseUrl(url);
+    setIsOpen(false);
+  };
+
+  const handleBlur = () => {
+    if (baseUrl.trim()) {
+      addUrl(baseUrl.trim());
+    }
+  };
+
+  const handleSaveEndpoint = () => {
+    const endpointURL = `${method} ${baseUrl}${controller}/${action}`;
+    console.log(endpointURL);
+  };
+
   return (
     <MainLayout>
-      <div className="mx-auto p-6 text-white container flex flex-col">
+      <div className="mx-auto p-6 text-white container flex flex-col selection:bg-white selection:text-black">
         <h2 className="text-2xl font-semibold mb-4">Add New Endpoint</h2>
 
         {/* Request Method & Base URL */}
@@ -72,14 +92,32 @@ const AddEndpointPage = () => {
             </Select>
           </div>
 
-          <div className="flex flex-col flex-1 min-w-[300px]">
+          <div
+            className="relative flex flex-col flex-1 min-w-[300px]"
+            ref={dropdownRef}
+          >
             <label className="mb-1">Base URL</label>
             <Input
               value={baseUrl}
               onChange={(e) => setBaseUrl(e.target.value)}
+              onFocus={() => setIsOpen(true)}
+              onBlur={handleBlur}
               placeholder="Enter base URL"
               className="text-white rounded-[0.5rem] border-[var(--color-border)]"
             />
+            {isOpen && history.length > 0 && (
+              <div className="absolute z-10 top-full mt-1 w-full bg-neutral-800 text-white rounded-md shadow-md">
+                {history.map((url, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelect(url)}
+                    className="px-3 py-2 hover:bg-neutral-700 cursor-pointer"
+                  >
+                    {url}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -88,8 +126,8 @@ const AddEndpointPage = () => {
           <div className="flex flex-col flex-1 min-w-[300px]">
             <label className="mb-1">Controller</label>
             <Input
-              value={endpoint}
-              onChange={(e) => setEndpoint(e.target.value)}
+              value={controller}
+              onChange={(e) => setController(e.target.value)}
               placeholder="Enter controller path"
               className="text-white rounded-[0.5rem] border-[var(--color-border)]"
             />
@@ -98,8 +136,8 @@ const AddEndpointPage = () => {
           <div className="flex flex-col flex-1 min-w-[300px]">
             <label className="mb-1">Action</label>
             <Input
-              value={endpoint}
-              onChange={(e) => setEndpoint(e.target.value)}
+              value={action}
+              onChange={(e) => setAction(e.target.value)}
               placeholder="Enter action path"
               className="text-white rounded-[0.5rem] border-[var(--color-border)]"
             />
@@ -177,6 +215,7 @@ const AddEndpointPage = () => {
           <Button
             title="Save Endpoint"
             className="w-full mt-4 bg-blue-500 hover:bg-blue-700 cursor-pointer rounded-[0.5rem] transition-all duration-300 ease-in-out"
+            onClick={handleSaveEndpoint}
           >
             Save Endpoint
           </Button>
