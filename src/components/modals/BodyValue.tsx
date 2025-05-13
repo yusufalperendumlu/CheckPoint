@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
+import clsx from "clsx";
+
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 import { Button } from "@/components/ui/button";
 import KeyValueInput from "@/components/KeyValueInput";
@@ -11,13 +14,13 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import clsx from "clsx";
 
 const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
   const [fields, setFields] = useState([{ key: "", value: "", type: "" }]);
   const [emailNotify, setEmailNotify] = useState(false);
   const [phoneNotify, setPhoneNotify] = useState(false);
   const [statusCode, setStatusCode] = useState("");
+  const modalRef = useOutsideClick<HTMLDivElement>(onClose);
 
   const handleAddField = () =>
     setFields([...fields, { key: "", value: "", type: "" }]);
@@ -55,7 +58,10 @@ const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
   console.log(fields);
 
   return (
-    <div className="relative p-6 bg-gray-100 rounded-xl text-black space-y-4">
+    <div
+      ref={modalRef}
+      className="relative p-6 bg-gray-100 rounded-xl text-black space-y-4"
+    >
       <span
         className="absolute -top-6 -right-6 cursor-pointer"
         onClick={onClose}

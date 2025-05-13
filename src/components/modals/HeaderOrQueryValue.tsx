@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
+import clsx from "clsx";
+
+import { useOutsideClick } from "@/hooks/useOutsideClick";
+
 import { Button } from "@/components/ui/button";
 import KeyValueInput from "@/components/KeyValueInput";
-import clsx from "clsx";
 
 const HeaderOrQueryModal = ({
   onClose,
@@ -12,6 +15,7 @@ const HeaderOrQueryModal = ({
   type: "Query" | "Header";
 }) => {
   const [fields, setFields] = useState([{ key: "", value: "", type: "" }]);
+  const modalRef = useOutsideClick<HTMLDivElement>(onClose);
 
   const handleAddField = () =>
     setFields([...fields, { key: "", value: "", type: "" }]);
@@ -46,7 +50,10 @@ const HeaderOrQueryModal = ({
   };
 
   return (
-    <div className="relative p-6 flex flex-col bg-white rounded-xl text-black space-y-4">
+    <div
+      ref={modalRef}
+      className="relative p-6 flex flex-col bg-white rounded-xl text-black space-y-4"
+    >
       <span
         className="absolute -top-6 -right-6 cursor-pointer"
         onClick={onClose}

@@ -12,6 +12,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Charts from "@/components/chart/Charts";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getDemoData } from "@/store/demo/demoAction";
+import { AppState } from "@/store/demo/demoReducer";
+
 const statData = [
   {
     title: "API Health Status",
@@ -61,6 +66,14 @@ const recentActivities = [
 ];
 
 export default function ApiAnalysisDashboard() {
+  const dispatch = useDispatch();
+  const demoData = useSelector((state: AppState) => state.drinks);
+  useEffect(() => {
+    dispatch(getDemoData());
+  }, [dispatch]);
+
+  console.log(demoData);
+
   return (
     <MainLayout>
       <div className="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -84,7 +97,7 @@ export default function ApiAnalysisDashboard() {
           </div>
 
           {/* Category Chart */}
-          <Charts />
+          <Charts width={"95%"} height={250} />
 
           {/* Quality Chart */}
           <Card className="bg-[var(--color-card)] rounded-2xl">
@@ -137,6 +150,7 @@ export default function ApiAnalysisDashboard() {
                   <p className="text-xs text-gray-500">{act.description}</p>
                 </div>
               ))}
+
               <Button
                 variant="link"
                 className="mt-2 p-0 text-blue-600 cursor-pointer"

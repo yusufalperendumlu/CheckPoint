@@ -21,6 +21,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
+import clsx from "clsx";
 
 const chartData = {
   barChartData: [
@@ -53,7 +54,12 @@ const chartData = {
 
 const colors = ["#8884d8", "#82ca9d"];
 
-const ChartSliderCard = () => {
+interface ChartFeature {
+  width: number | string;
+  height: number;
+}
+
+const ChartSliderCard: React.FC<ChartFeature> = ({ width, height }) => {
   const [sliderInstanceRef, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
@@ -77,9 +83,12 @@ const ChartSliderCard = () => {
           </button>
 
           {/* Slider Content */}
-          <div ref={sliderInstanceRef} className="keen-slider w-full h-[250px]">
+          <div
+            ref={sliderInstanceRef}
+            className={clsx("keen-slider w-full h-[250px]")}
+          >
             <div className="keen-slider__slide">
-              <ResponsiveContainer width="90%" height={200}>
+              <ResponsiveContainer width={width} height={height}>
                 <BarChart data={chartData.barChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
@@ -91,7 +100,7 @@ const ChartSliderCard = () => {
             </div>
 
             <div className="keen-slider__slide">
-              <ResponsiveContainer width="90%" height={200}>
+              <ResponsiveContainer width={width} height={height}>
                 <LineChart data={chartData.lineChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
@@ -108,7 +117,7 @@ const ChartSliderCard = () => {
             </div>
 
             <div className="keen-slider__slide">
-              <ResponsiveContainer width="90%" height={200}>
+              <ResponsiveContainer width={width} height={height}>
                 <RadarChart outerRadius={80} data={chartData.radarData}>
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" />
@@ -124,7 +133,7 @@ const ChartSliderCard = () => {
             </div>
 
             <div className="keen-slider__slide">
-              <ResponsiveContainer width="90%" height={200}>
+              <ResponsiveContainer width={width} height={height}>
                 <PieChart>
                   <Pie
                     data={chartData.pieData}
