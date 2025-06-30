@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import clsx from "clsx";
 
@@ -117,7 +117,7 @@ const BodyValueModal = ({ onClose }: { onClose: () => void }) => {
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Seçiniz" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent className="select-content bg-white">
               <SelectItem value="400">400</SelectItem>
               <SelectItem value="401">401</SelectItem>
               <SelectItem value="500">500</SelectItem>

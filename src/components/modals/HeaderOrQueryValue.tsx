@@ -60,7 +60,7 @@ const HeaderOrQueryModal = ({
       >
         <IoCloseSharp className="w-6 h-6 text-white" />
       </span>
-      <h3 className="text-xl font-semibold">{type}’den Değer Yolla</h3>
+      <h3 className="text-xl font-semibold">Value of {type}</h3>
       <KeyValueInput
         pairs={fields}
         onAdd={handleAddField}

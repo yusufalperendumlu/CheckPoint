@@ -4,8 +4,30 @@ import { MdOutlineApi } from "react-icons/md";
 import { Link } from "@tanstack/react-router";
 import { buttonVariants } from "@/components/ui/button";
 import ParticlesBackground from "@/components/modals/ParticlesBackground";
+import { useRef } from "react";
 
-const LandingPage = () => {
+const LandingPage: React.FC = () => {
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!imageRef.current) return;
+
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const offsetX = (x / rect.width - 0.5) * 25;
+    const offsetY = (y / rect.height - 0.5) * 25;
+
+    imageRef.current.style.transform = `rotateX(${offsetY}deg) rotateY(${offsetX}deg)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (imageRef.current) {
+      imageRef.current.style.transform = "scale(1) translate(0px, 0px)";
+    }
+  };
+
   return (
     <>
       <ParticlesBackground />
@@ -36,11 +58,16 @@ const LandingPage = () => {
               </Link>
             </div>
           </div>
-          <div className="">
+          <div
+            className="relative w-full max-w-md overflow-hidden"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
             <img
-              className="object-fill"
+              ref={imageRef}
+              className="object-cover w-full h-auto transition-transform duration-200 ease-out will-change-transform"
               src="https://assets.api.uizard.io/api/cdn/stream/4ed19f60-a89f-40e4-bc19-03d383610725.png"
-              alt=""
+              alt="Hoverable"
             />
           </div>
         </div>

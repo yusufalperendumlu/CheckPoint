@@ -12,11 +12,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Charts from "@/components/chart/Charts";
 
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getDemoData } from "@/store/demo/demoAction";
-import { AppState } from "@/store/demo/demoReducer";
-
 const statData = [
   {
     title: "API Health Status",
@@ -66,14 +61,6 @@ const recentActivities = [
 ];
 
 export default function ApiAnalysisDashboard() {
-  const dispatch = useDispatch();
-  const demoData = useSelector((state: AppState) => state.drinks);
-  useEffect(() => {
-    dispatch(getDemoData());
-  }, [dispatch]);
-
-  console.log(demoData);
-
   return (
     <MainLayout>
       <div className="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">

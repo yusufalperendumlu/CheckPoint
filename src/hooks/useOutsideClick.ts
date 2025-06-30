@@ -7,7 +7,11 @@ export function useOutsideClick<T extends HTMLElement = HTMLElement>(callback: C
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) {
+            const target = e.target as HTMLElement;
+
+            const clickedInSelectDropdown = target.closest(".select-content");
+
+            if (ref.current && !ref.current.contains(e.target as Node) && !clickedInSelectDropdown) {
                 callback();
             }
         }
