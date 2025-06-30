@@ -64,7 +64,7 @@ const KeyValueInput: React.FC<IKeyValueProps> = ({
                 <SelectTrigger className="w-[100px] text-sm">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
-                <SelectContent className="bg-white">
+                <SelectContent className="select-content bg-white">
                   <SelectItem value="String">String</SelectItem>
                   <SelectItem value="Integer">Integer</SelectItem>
                   <SelectItem value="Boolean">Boolean</SelectItem>

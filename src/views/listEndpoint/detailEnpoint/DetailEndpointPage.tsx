@@ -1,61 +1,66 @@
-import { useState } from "react";
-import { useParams } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { routeTree } from "@/routes/__root";
+import { useParams } from "@tanstack/react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import MainLayout from "@/components/MainLayout";
 import { Bar, BarChart } from "recharts";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { RootState } from "@/store/rootReducer";
+import { getListEndpointDetailRequest } from "@/store/listEndpointDetail/listEndpointDetailAction";
 
-const controllers = [
-  {
-    name: "UserController",
-    actions: [
-      {
-        name: "createUser",
-        response: { status: 201, message: "User created successfully" },
-      },
-      {
-        name: "deleteUser",
-        response: { status: 200, message: "User deleted successfully" },
-      },
-    ],
-  },
-  {
-    name: "ProductController",
-    actions: [
-      {
-        name: "addProduct",
-        response: { status: 201, message: "Product added" },
-      },
-    ],
-  },
-];
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+// const controllers = [
+//   {
+//     name: "UserController",
+//     actions: [
+//       {
+//         name: "createUser",
+//         response: { status: 201, message: "User created successfully" },
+//       },
+//       {
+//         name: "deleteUser",
+//         response: { status: 200, message: "User deleted successfully" },
+//       },
+//     ],
+//   },
+//   {
+//     name: "ProductController",
+//     actions: [
+//       {
+//         name: "addProduct",
+//         response: { status: 201, message: "Product added" },
+//       },
+//     ],
+//   },
+// ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#2563eb",
+  success: {
+    label: "Success",
+    color: "#22c55e", // Green color for success
   },
-  mobile: {
-    label: "Mobile",
-    color: "#60a5fa",
+  unSuccess: {
+    label: "Unsuccess",
+    color: "#ef4444", // Red color for unsuccess
   },
 } satisfies ChartConfig;
 
 const DetailEndpointPage = () => {
-  const { team } = useParams({
+  const dispatch = useDispatch();
+  const { data, loading } = useSelector(
+    (state: RootState) => state.listEndpointDetail
+  );
+
+  console.log(data?.controllers?.[0]?.unSuccessCount);
+
+  const controllers = data?.controllers || [];
+
+  const { id } = useParams({
     from: routeTree.id,
   });
+
+  console.log("DetailEndpointPage id:", id);
   const handleBackArrowClick = () => {
     window.history.back();
   };
@@ -75,6 +80,12 @@ const DetailEndpointPage = () => {
     );
   };
 
+  useEffect(() => {
+    if (id) {
+      dispatch(getListEndpointDetailRequest({ projectId: Number(id) }));
+    }
+  }, [dispatch, id]);
+
   return (
     <MainLayout>
       <div className="w-full h-full flex justify-center items-start overflow-x-hidden text-white">
@@ -88,7 +99,13 @@ const DetailEndpointPage = () => {
             </button>
             <div className="flex items-center justify-center">
               <span className="text-xl font-bold flex text-gray-100">
-                {team}
+                {loading ? (
+                  <span className="animate-pulse">
+                    <div className="w-20 h-2 rounded bg-gray-400"></div>
+                  </span>
+                ) : (
+                  data?.projectName
+                )}
               </span>
             </div>
           </div>
@@ -98,70 +115,92 @@ const DetailEndpointPage = () => {
 
           {/* Collapsible Controllers */}
           <div className="flex flex-col gap-4 mt-8">
-            {controllers.map((controller) => (
-              <div
-                key={controller.name}
-                className=" rounded-lg p-4 bg-[var(--color-collaboration)]"
-              >
+            {!loading &&
+              controllers.map((controller, index) => (
                 <div
-                  className="flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleController(controller.name)}
+                  key={index}
+                  className=" rounded-lg p-4 bg-[var(--color-collaboration)]"
                 >
-                  <span className="text-lg font-semibold">
-                    {"/" + controller.name}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <ChartContainer config={chartConfig} className="w-16 h-8">
-                      <BarChart accessibilityLayer data={chartData}>
-                        <Bar
-                          dataKey="desktop"
-                          fill="var(--color-chart1)"
-                          radius={4}
-                        />
-                        <Bar
-                          dataKey="mobile"
-                          fill="var(--color-chart2)"
-                          radius={4}
-                        />
-                      </BarChart>
-                    </ChartContainer>
-                    <div className=" text-xs space-y-1">
-                      <p>
-                        <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2" />{" "}
-                        Active
-                      </p>
-                      <p>
-                        <span className="inline-block w-2 h-2 bg-purple-500 rounded-full mr-2" />{" "}
-                        Passive
-                      </p>
-                    </div>
-                  </div>
-                  {openControllers.includes(controller.name) ? (
-                    <FaChevronDown />
-                  ) : (
-                    <FaChevronRight />
-                  )}
-                </div>
-
-                {/* Actions */}
-                {openControllers.includes(controller.name) && (
-                  <div className="pl-6 flex flex-col gap-2 mt-4">
-                    {controller.actions.map((action) => (
-                      <div key={action.name}>
-                        <div
-                          className="flex items-center justify-between cursor-pointer py-2"
-                          onClick={() => toggleAction(action.name)}
+                  <div
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => toggleController(controller.controllerName!)}
+                  >
+                    <span className="text-lg font-semibold">
+                      {"/" + controller.controllerName}
+                    </span>
+                    <div className="flex items-center gap-4">
+                      <ChartContainer
+                        config={chartConfig}
+                        className="w-24 h-10"
+                      >
+                        <BarChart
+                          accessibilityLayer
+                          data={[
+                            {
+                              success: controller.successCount,
+                              unSuccess: controller.unSuccessCount,
+                            },
+                          ]}
                         >
-                          <span className="text-md">{"/" + action.name}</span>
-                          {openActions.includes(action.name) ? (
-                            <FaChevronDown />
-                          ) : (
-                            <FaChevronRight />
-                          )}
-                        </div>
+                          <Bar
+                            dataKey="success"
+                            fill={chartConfig.success.color}
+                            radius={4}
+                          />
+                          <Bar
+                            dataKey="unSuccess"
+                            fill={chartConfig.unSuccess.color}
+                            radius={4}
+                          />
+                        </BarChart>
+                      </ChartContainer>
 
-                        {/* Action Response */}
-                        {openActions.includes(action.name) && (
+                      <div className="text-xs space-y-1">
+                        <p>
+                          <span className="inline-block w-2 h-2 bg-[color:var(--color-success)] rounded-full mr-2" />
+                          Success: {controller.successCount}
+                        </p>
+                        <p>
+                          <span className="inline-block w-2 h-2 bg-[color:var(--color-error)] rounded-full mr-2" />
+                          Unsuccess: {controller.unSuccessCount}
+                        </p>
+                      </div>
+                    </div>
+
+                    {openControllers.includes(
+                      controller.controllerName as string
+                    ) ? (
+                      <FaChevronDown />
+                    ) : (
+                      <FaChevronRight />
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  {openControllers.includes(
+                    controller.controllerName as string
+                  ) && (
+                    <div className="pl-6 flex flex-col gap-2 mt-4">
+                      {controller?.actions!.map((action) => (
+                        <div key={action.actionId}>
+                          <div
+                            className="flex items-center justify-between cursor-pointer py-2"
+                            onClick={() =>
+                              toggleAction(action.actionName as string)
+                            }
+                          >
+                            <span className="text-md">
+                              {"/" + action.actionName}
+                            </span>
+                            {openActions.includes(action.actionName!) ? (
+                              <FaChevronDown />
+                            ) : (
+                              <FaChevronRight />
+                            )}
+                          </div>
+
+                          {/* Action Response */}
+                          {/* {openActions.includes(action.name) && (
                           <div className="pl-6 py-4 text-sm bg-white text-gray-800 flex flex-col gap-1 mt-2">
                             <div>
                               <span className="font-semibold">Status:</span>{" "}
@@ -172,13 +211,13 @@ const DetailEndpointPage = () => {
                               {action.response.message}
                             </div>
                           </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                        )} */}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       </div>

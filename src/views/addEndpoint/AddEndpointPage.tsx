@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast, Toaster } from "sonner";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/rootReducer";
+
+import { postAddRequestInfoRequest } from "@/store/addRequestInfo/addRequestInfoAction";
 
 import { useUrlHistory } from "@/hooks/useUrlHistory";
 
@@ -18,6 +24,13 @@ import BodyValueModal from "@/components/modals/BodyValue";
 import HeaderOrQueryModal from "@/components/modals/HeaderOrQueryValue";
 
 const AddEndpointPage = () => {
+  const baseUrlAccording = useSelector(
+    (state: RootState) => state.baseUrlAccording
+  );
+  const { loading, data, error } = useSelector(
+    (state: RootState) => state.addRequestInfo
+  );
+  const dispatch = useDispatch();
   const [baseUrl, setBaseUrl] = useState("");
   const { history, addUrl, isOpen, setIsOpen, dropdownRef } = useUrlHistory();
   const [controller, setController] = useState("");
@@ -29,6 +42,8 @@ const AddEndpointPage = () => {
   const [headerOrQueryType, setHeaderOrQueryType] = useState<
     "Header" | "Query"
   >();
+
+  const [projectId, setProjectId] = useState(2);
 
   const handleAddParam = () => {
     setParams([...params, ""]);
@@ -62,13 +77,58 @@ const AddEndpointPage = () => {
     }
   };
 
-  const handleSaveEndpoint = () => {
-    const endpointURL = `${method} ${baseUrl}${controller}/${action}`;
-    console.log(endpointURL);
+  const handleOnSaveEndpoint = () => {
+    dispatch(
+      postAddRequestInfoRequest({
+        baseUrlId: 1,
+        controllerId: 0,
+        controllerPath: controller,
+        actionPath: action,
+        requestType:
+          method === "GET"
+            ? 1
+            : method === "POST"
+              ? 2
+              : method === "PUT"
+                ? 3
+                : 4,
+        query: "",
+        header: "",
+        body: "",
+      })
+    );
+
+    setBaseUrl("");
+    setController("");
+    setAction("");
+    setMethod("GET");
+    setParams([""]);
+    setShowBodyModal(false);
+    setShowHeaderOrQueryModal(false);
+
+    toast.success("Endpoint saved successfully!");
   };
+
+  useEffect(() => {
+    try {
+      dispatch({
+        type: "GET_BASE_URL_ACCORDING",
+        payload: { projectId: projectId },
+      });
+    } catch (error: string | unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch base URLs: ${error.message}`);
+      }
+    }
+  }, [dispatch, projectId]);
+
+  const baseUrlFromStore = Array.isArray(baseUrlAccording.value)
+    ? baseUrlAccording.value
+    : [];
 
   return (
     <MainLayout>
+      <Toaster position="bottom-right" richColors closeButton={false} />
       <div className="mx-auto p-6 text-white container flex flex-col selection:bg-white selection:text-black">
         <h2 className="text-2xl font-semibold mb-4">Add New Endpoint</h2>
 
@@ -105,15 +165,15 @@ const AddEndpointPage = () => {
               placeholder="Enter base URL"
               className="text-white rounded-[0.5rem] border-[var(--color-border)]"
             />
-            {isOpen && history.length > 0 && (
+            {isOpen && baseUrlFromStore.length > 0 && (
               <div className="absolute z-10 top-full mt-1 w-full bg-neutral-800 text-white rounded-md shadow-md">
-                {history.map((url, index) => (
+                {baseUrlFromStore.map((url) => (
                   <div
-                    key={index}
-                    onClick={() => handleSelect(url)}
+                    key={url.id}
+                    onClick={() => handleSelect(url.baseUrl)}
                     className="px-3 py-2 hover:bg-neutral-700 cursor-pointer"
                   >
-                    {url}
+                    {url.baseUrl}
                   </div>
                 ))}
               </div>
@@ -215,7 +275,8 @@ const AddEndpointPage = () => {
           <Button
             title="Save Endpoint"
             className="w-full mt-4 bg-blue-500 hover:bg-blue-700 cursor-pointer rounded-[0.5rem] transition-all duration-300 ease-in-out"
-            onClick={handleSaveEndpoint}
+            onClick={handleOnSaveEndpoint}
+            disabled={loading || !baseUrl || !controller || !action}
           >
             Save Endpoint
           </Button>

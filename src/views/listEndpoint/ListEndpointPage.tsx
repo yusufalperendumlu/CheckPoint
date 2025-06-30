@@ -60,8 +60,8 @@ const ListEndpoint = () => {
                 team="Team A"
                 onShowMore={() =>
                   navigate({
-                    to: "/list-endpoint/detail-endpoint/$team",
-                    params: { team: "Team-A" },
+                    to: "/list-endpoint/detail-endpoint/$id",
+                    params: { id: "1", team: "Team-A" },
                   })
                 }
               />
@@ -71,8 +71,8 @@ const ListEndpoint = () => {
                 team="Team B"
                 onShowMore={() =>
                   navigate({
-                    to: "/list-endpoint/detail-endpoint/$team",
-                    params: { team: "Team-B" },
+                    to: "/list-endpoint/detail-endpoint/$id",
+                    params: { id: "2", team: "Team-B" },
                   })
                 }
               />

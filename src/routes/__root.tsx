@@ -65,7 +65,7 @@ const listEndpointRoute = createRoute({
 
 const detailEndpointRoute = createRoute({
   getParentRoute: () => listEndpointRoute,
-  path: "detail-endpoint/$team",
+  path: "detail-endpoint/$id",
   component: () => <DetailEndpointPage />,
 });
 

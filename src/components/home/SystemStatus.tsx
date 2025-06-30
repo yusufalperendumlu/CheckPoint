@@ -1,20 +1,28 @@
+import { useDispatch, useSelector } from "react-redux";
+
 import { Button } from "@/components/ui/button";
 import Card from "@/components/card/Card";
 import { Chart } from "@/components/home/Chart";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import { RootState } from "@/store/rootReducer";
+import { useEffect } from "react";
+import { getEndpointOverviewRequest } from "@/store/endpointOverview/endpointOverviewAction";
 
 const SystemStatus = () => {
+  const dispatch = useDispatch();
+  const { data } = useSelector((state: RootState) => state.endpointOverview);
+
   const StatusCards = [
     {
-      value: 12,
+      value: data?.endpointCount || 0,
       label: "Total Endpoints",
     },
     {
-      value: 7,
+      value: data?.active || 0,
       label: "Active",
     },
     {
-      value: 5,
+      value: data?.pasive || 0,
       label: "Passive",
     },
   ];
@@ -31,6 +39,16 @@ const SystemStatus = () => {
       time: "2 hours ago",
     },
   ];
+
+  useEffect(() => {
+    dispatch(
+      getEndpointOverviewRequest({
+        projectId: 1,
+      })
+    );
+  }, [dispatch]);
+
+  console.log(data);
 
   return (
     <div className="p-6 text-white w-full h-full">
